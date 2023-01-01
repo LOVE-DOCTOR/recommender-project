@@ -141,6 +141,7 @@ def receive_and_process_input():
 
             with rec1:
                 st.header(list(first_recommendation['Name'])[0])
+                st.image(list(first_recommendation['link'])[0])
                 st.write(list(first_recommendation['Genres'])[0])
                 st.write(list(first_recommendation['Score'])[0])
                 with st.expander('Synopsis'):
