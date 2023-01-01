@@ -134,7 +134,7 @@ def receive_and_process_input():
             sea1, sea2, sea3 = st.columns(3)
             with sea1:
                 img_search_url = f'{img_first_url}{list(my_search["poster_path"])[0]}'
-                st.write(f'<div class="search-head">Hello</div>',unsafe_allow_html=True)
+                st.write(f'<div class="search-head">SEARCH</div>', unsafe_allow_html=True)
                 st.markdown(f"""
                                 <h3>{list(my_search['original_title'])[0]}</h3>
                                 """, unsafe_allow_html=True)

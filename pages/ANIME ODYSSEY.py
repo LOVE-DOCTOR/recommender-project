@@ -1,12 +1,12 @@
 import json
 from itertools import islice
 
-import brotli
 import pandas as pd
-import spacy
-from spacy.tokens import DocBin
+import brotli
 import streamlit as st
 import hydralit_components as hc
+import torch
+from sentence_transformers import SentenceTransformer, util
 
 st.set_page_config(
     page_title='AnimeOdyssey',
@@ -20,45 +20,29 @@ st.markdown('<style>' + open('styles.css').read() + '</style>', unsafe_allow_htm
 
 class AnimeOdyssey:
     def __init__(_self,
-                 csv: str = './data/anime/search_recom.csv',
-                 spacy: str = 'en_core_web_lg',
-                 dictionary: str = './data/anime/saved_dict.brotli',
-                 combined_features: str = './data/anime/combined_features.spacy'
+                 parquet: str = './data/anime/search_recom.parquet',
+                 model_path: str = 'all-mpnet-base-v2',
+                 embedding_with_title: str = './data/anime/an_combined_embeddings.pt',
+
                  ):
-        _self.csv = csv
-        _self.spacy = spacy
-        _self.dictionary = dictionary
-        _self.combined_features = combined_features
+        _self.parquet = parquet
+        _self.model_path = model_path
+        _self.embedding_with_title = embedding_with_title
 
     @st.experimental_singleton
-    def read_csv_data(_self):
-        data = pd.read_csv(_self.csv)
-        data['lower_names'] = [i.lower() for i in data['Name']]
+    def read_parquet_data(_self):
+        data = pd.read_parquet(_self.parquet)
         return data
 
     @st.experimental_singleton
-    def read_spacy_model(_self):
-        nlp = spacy.load(_self.spacy)
-        return nlp
+    def read_model(_self):
+        model = SentenceTransformer(_self.model_path)
+        return model
 
     @st.experimental_singleton
-    def read_genre_doc_tokens(_self):
-        nlp = _self.read_spacy_model()
-        docbin = DocBin().from_disk(_self.combined_features)
-        return list(docbin.get_docs(nlp.vocab))
-
-    @st.experimental_singleton
-    def read_dictionary_data(_self):
-        with open(_self.dictionary, "rb") as f:
-            compressed_dict = f.read()
-            byte_string = brotli.decompress(compressed_dict)
-
-        json_string = byte_string.decode()
-        my_dict = json.loads(json_string)
-        new_dict_values = _self.read_genre_doc_tokens()
-        updated_dict = {int(k): v for k, v in zip(my_dict.keys(), new_dict_values)}
-
-        return updated_dict
+    def generate_embeddings(_self):
+        combined_embeddings = torch.load(_self.embedding_with_title)
+        return combined_embeddings
 
 
 def AnimeOdysseyPage():
@@ -75,14 +59,28 @@ def AnimeOdysseyPage():
     st.caption('GitHub Repo: ')
 
 
-def get_index_genres(movie_name):
-    data = AnimeOdyssey().read_csv_data()
+def get_index(movie_name):
+    df = AnimeOdyssey().read_parquet_data()
+    queries = [movie_name]
+    top_k = min(7, len(df['genre'].tolist()))
+    model = AnimeOdyssey().read_model()
+    embeddings = AnimeOdyssey().generate_embeddings()
 
-    try:
-        return int(data[data['Name'] == movie_name]['index'])
-    except TypeError:
-        st.write('Alternate')
-        return int(data[data['lower_names'] == movie_name]['index'])
+    similarity_index = list()
+    score = list()
+
+    for query in queries:
+        query_embedding = model.encode(query, convert_to_tensor=True)
+
+        # We use cosine-similarity and torch.topk to find the highest 5 scores
+        cos_scores = util.cos_sim(query_embedding, embeddings)[0]
+        top_results = torch.topk(cos_scores, k=top_k)
+
+        for scores, idx in zip(top_results[0], top_results[1]):
+            similarity_index.append(int(idx))
+            score.append(scores)
+
+    return similarity_index, score
 
 
 def get_input_similarity(index, words):
@@ -96,7 +94,7 @@ def get_input_similarity(index, words):
 
 def receive_and_process_input():
     anim = AnimeOdyssey()
-    data = anim.read_csv_data()
+    data = anim.read_parquet_data()
     data_anime_name = data['Name'].tolist()
     anime_show = st.selectbox('Name of your anime show: ', data_anime_name)
     st.write(
@@ -123,37 +121,20 @@ def receive_and_process_input():
     )
     if anime_show:
         with hc.HyLoader('...', hc.Loaders.pretty_loaders):
+            index, scores = get_index(anime_show)
+            index, scores = index[1:], scores[1:]
 
-            data_dict = anim.read_dictionary_data()
-            index = get_index_genres(anime_show)
-            similarities_dict = get_input_similarity(index, data_dict)
-            top_100_recommendations_sort = islice(similarities_dict.keys(), 100)
+            top_6_ind = [int(i) for i in index]
 
-            check_df = pd.DataFrame()
-            check_df['movie_index'] = [i for i in top_100_recommendations_sort]
-            newer = []
-            for i in check_df['movie_index']:
-                if i in list(data['index']):
-                    score = data[data['index'] == i]
-                    score = list(score['Score'])
-                    newer.append(score[0])
+            data_names = data_anime_name.index(anime_show)
 
-            top_recommendations = list(check_df['movie_index'])
-            top_recommendations = top_recommendations[1:]
-            newer = newer[1:]
-
-            recommend_dict = {top_recommendations[i]: newer[i] for i in range(len(newer))}
-            recommend_dict_sorted = dict(sorted(recommend_dict.items(), key=lambda x: x[1], reverse=True))
-            recommend_dict_list = [i for i in recommend_dict_sorted.keys()]
-
-            top_6_ind = [recommend_dict_list[i] for i in range(6)]
-
-            first_recommendation = data[data['index'] == top_6_ind[0]]
-            second_recommendation = data[data['index'] == top_6_ind[1]]
-            third_recommendation = data[data['index'] == top_6_ind[2]]
-            fourth_recommendation = data[data['index'] == top_6_ind[3]]
-            fifth_recommendation = data[data['index'] == top_6_ind[4]]
-            sixth_recommendation = data[data['index'] == top_6_ind[5]]
+            my_search = data[data_names: data_names + 1]
+            first_recommendation = data[top_6_ind[0]: top_6_ind[0] + 1]
+            second_recommendation = data[top_6_ind[1]: top_6_ind[1] + 1]
+            third_recommendation = data[top_6_ind[2]: top_6_ind[2] + 1]
+            fourth_recommendation = data[top_6_ind[3]: top_6_ind[3] + 1]
+            fifth_recommendation = data[top_6_ind[4]: top_6_ind[4] + 1]
+            sixth_recommendation = data[top_6_ind[5]: top_6_ind[5] + 1]
 
             rec1, rec2, rec3 = st.columns(3)
             rec4, rec5, rec6 = st.columns(3)
@@ -161,42 +142,42 @@ def receive_and_process_input():
             with rec1:
                 st.header(list(first_recommendation['Name'])[0])
                 st.write(list(first_recommendation['Genres'])[0])
-                st.write(f'Rating: {recommend_dict[top_6_ind[0]]}')
+                st.write(list(first_recommendation['Score'])[0])
                 with st.expander('Synopsis'):
                     st.write(list(first_recommendation['sypnopsis'])[0])
 
             with rec2:
                 st.header(list(second_recommendation['Name'])[0])
                 st.write(list(second_recommendation['Genres'])[0])
-                st.write(f'Rating: {recommend_dict[top_6_ind[1]]}')
+                st.write(list(second_recommendation['Score'])[0])
                 with st.expander('Synopsis'):
                     st.write(list(second_recommendation['sypnopsis'])[0])
 
             with rec3:
                 st.header(list(third_recommendation['Name'])[0])
                 st.write(list(third_recommendation['Genres'])[0])
-                st.write(f'Rating: {recommend_dict[top_6_ind[2]]}')
+                st.write(list(third_recommendation['Score'])[0])
                 with st.expander('Synopsis'):
                     st.write(list(third_recommendation['sypnopsis'])[0])
 
             with rec4:
                 st.header(list(fourth_recommendation['Name'])[0])
                 st.write(list(fourth_recommendation['Genres'])[0])
-                st.write(f'Rating: {recommend_dict[top_6_ind[3]]}')
+                st.write(list(fourth_recommendation['Score'])[0])
                 with st.expander('Synopsis'):
                     st.write(list(fourth_recommendation['sypnopsis'])[0])
 
             with rec5:
                 st.header(list(fifth_recommendation['Name'])[0])
                 st.write(list(fifth_recommendation['Genres'])[0])
-                st.write(f'Rating: {recommend_dict[top_6_ind[4]]}')
+                st.write(list(fifth_recommendation['Score'])[0])
                 with st.expander('Synopsis'):
                     st.write(list(fifth_recommendation['sypnopsis'])[0])
 
             with rec6:
                 st.header(list(sixth_recommendation['Name'])[0])
                 st.write(list(sixth_recommendation['Genres'])[0])
-                st.write(f'Rating: {recommend_dict[top_6_ind[5]]}')
+                st.write(list(sixth_recommendation['Score'])[0])
                 with st.expander('Synopsis'):
                     st.write(list(sixth_recommendation['sypnopsis'])[0])
 
