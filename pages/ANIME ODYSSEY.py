@@ -16,6 +16,7 @@ st.set_page_config(
 )
 
 st.markdown('<style>' + open('styles.css').read() + '</style>', unsafe_allow_html=True)
+st.markdown('<style>' + open('anime-styles.css').read() + '</style>', unsafe_allow_html=True)
 
 
 class AnimeOdyssey:
