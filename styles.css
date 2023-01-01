@@ -1,0 +1,176 @@
+.main {
+    display: inline-block;
+  }
+
+.text {
+  font-family: proxima-nova, proxima-nova-alt, canada-type-gibson, Gotham, "Gotham SSm A", "Gotham SSm B", Helvetica, sans-serif;
+  font-size: 19px;
+  font-style: normal;
+  font-weight: 300;
+  letter-spacing: 1px;
+  line-height: 30px;
+  text-transform: none;
+}
+
+.column-grid {
+  font-family: proxima-nova, proxima-nova-alt, canada-type-gibson, Gotham, "Gotham SSm A", "Gotham SSm B", Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 300;
+  letter-spacing: 1px;
+  line-height: 30px;
+  text-transform: none;
+
+}
+
+.css-6qob1r{
+  background-color: darkgray;
+  width: 5;
+  overflow: hidden;
+  transition: width 0.5s
+}
+
+.css-6qob1r:hover {
+  width: 300px
+}
+
+.css-pkbazv{
+  color: black;
+}
+
+.css-17lntkn{
+  color: black;
+}
+
+section[data-testid='stSidebar'] {
+    background-color: #111;
+    min-width:unset !important;
+    width: unset !important;
+    flex-shrink: unset !important;
+
+}
+
+button[kind="header"] {
+    background-color: transparent;
+    color:rgb(180, 167, 141)
+}
+
+@media(hover){
+    /* header element to be removed */
+    header[data-testid="stHeader"] {
+        display:none;
+
+
+    }
+
+    /* The navigation menu specs and size */
+    section[data-testid='stSidebar'] > div {
+        height: 100%;
+        width: 95px;
+        position: relative;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        /*background-color: #111;*/
+        overflow-x: hidden;
+        transition: 0.5s ease;
+        padding-top: 60px;
+        white-space: nowrap;
+    }
+
+    /* The navigation menu open and close on hover and size */
+    section[data-testid='stSidebar'] > div {
+    height: 100%;
+    width: 60px; /* Put some width to hover on. */
+    }
+    /* ON HOVER */
+    section[data-testid='stSidebar'] > div:hover{
+    width: 300px;
+    }
+
+    /* The button on the streamlit navigation menu - hidden */
+    button[kind="header"] {
+        display: none;
+    }
+
+}
+
+@media(max-width: 272px){
+
+    section[data-testid='stSidebar'] > div {
+        width:15rem;
+    }
+}
+
+.column-header {
+  font-family: proxima-nova, proxima-nova-alt, canada-type-gibson, Gotham, "Gotham SSm A", "Gotham SSm B", Helvetica, sans-serif;
+  font-size: 40px;
+  font-weight: 570;
+  color: dodgerblue;
+}
+
+a {
+  text-decoration: none;
+}
+
+.typewriter {
+  overflow: hidden;
+  border-right: 0.15em solid black;
+  white-space: nowrap;
+  width: 100px;
+  margin: 0 auto;
+  letter-spacing: 0.15em;
+  animation: typing 6s steps(15, end), blink-caret 1.5s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink {
+  from { border-color: transparent }
+  to { border-color: black }
+}
+
+.container{
+  display: inline-block;
+font-weight: bolder;
+font-family: gnuolane, "Tungsten A", "Tungsten B", Tungsten, Helvetica, sans-serif;
+width: 100%;
+font-size: 50px;
+}
+.container2{
+  display: inline-block;
+font-weight: bolder;
+  font-family: gnuolane, "Tungsten A", "Tungsten B", Tungsten, Helvetica, sans-serif;
+width: 100%;
+font-size: 50px;
+}
+.typed-out{
+  overflow: hidden;
+  border-right: .15em solid orange;
+  white-space: nowrap;
+  animation:
+  typing 1s steps(20, start) forwards;
+  /*font-size: 30px;*/
+  width: 0;
+}
+@keyframes typing {
+  from { width: 0 }
+  to { width: 310px }
+}
+
+.container2 {
+  filter: blur(8px);
+  transition: filter 1s;
+}
+
+.container2:hover {
+  filter: blur(0);
+}
+
+.search-head {
+    color: blue !important;
+}
+

@@ -1,0 +1,1 @@
+web: sh setup.sh && streamlit run HOME.py --server.port=80
