@@ -55,16 +55,7 @@ button[kind="header"] {
     color:rgb(180, 167, 141)
 }
 
-@media(hover){
-    /* header element to be removed */
-    header[data-testid="stHeader"] {
-        display:none;
-
-
-    }
-
-    /* The navigation menu specs and size */
-    section[data-testid='stSidebar'] > div {
+@media(hover){section[data-testid='stSidebar'] > div {
         height: 100%;
         width: 95px;
         position: relative;
@@ -77,6 +68,15 @@ button[kind="header"] {
         padding-top: 60px;
         white-space: nowrap;
     }
+    /* header element to be removed */
+    header[data-testid="stHeader"] {
+        display:none;
+
+
+    }
+
+    /* The navigation menu specs and size */
+
 
     /* The navigation menu open and close on hover and size */
     section[data-testid='stSidebar'] > div {

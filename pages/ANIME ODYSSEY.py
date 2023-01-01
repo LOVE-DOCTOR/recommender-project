@@ -133,7 +133,11 @@ def receive_and_process_input():
             rec4, rec5, rec6 = st.columns(3)
 
             with rec1:
-                st.header(list(first_recommendation['Name'])[0])
+                st.markdown(
+                    f"""
+                    <h3>{list(first_recommendation['Name'])[0]}</h3>
+                    """, unsafe_allow_html=True
+                )
                 st.image(list(first_recommendation['url'])[0])
                 st.write(list(first_recommendation['Genres'])[0])
                 st.write(list(first_recommendation['Score'])[0])
@@ -141,7 +145,11 @@ def receive_and_process_input():
                     st.write(list(first_recommendation['sypnopsis'])[0])
 
             with rec2:
-                st.header(list(second_recommendation['Name'])[0])
+                st.markdown(
+                    f"""
+                    <h3>{list(second_recommendation['Name'])[0]}</h3>
+                    """, unsafe_allow_html=True
+                )
                 st.image(list(second_recommendation['url'])[0])
                 st.write(list(second_recommendation['Genres'])[0])
                 st.write(list(second_recommendation['Score'])[0])
@@ -149,7 +157,11 @@ def receive_and_process_input():
                     st.write(list(second_recommendation['sypnopsis'])[0])
 
             with rec3:
-                st.header(list(third_recommendation['Name'])[0])
+                st.markdown(
+                    f"""
+                    <h3>{list(third_recommendation['Name'])[0]}</h3>
+                    """, unsafe_allow_html=True
+                )
                 st.image(list(third_recommendation['url'])[0])
                 st.write(list(third_recommendation['Genres'])[0])
                 st.write(list(third_recommendation['Score'])[0])
@@ -157,7 +169,11 @@ def receive_and_process_input():
                     st.write(list(third_recommendation['sypnopsis'])[0])
 
             with rec4:
-                st.header(list(fourth_recommendation['Name'])[0])
+                st.markdown(
+                    f"""
+                    <h3>{list(fourth_recommendation['Name'])[0]}</h3>
+                    """, unsafe_allow_html=True
+                )
                 st.image(list(fourth_recommendation['url'])[0])
                 st.write(list(fourth_recommendation['Genres'])[0])
                 st.write(list(fourth_recommendation['Score'])[0])
@@ -165,7 +181,11 @@ def receive_and_process_input():
                     st.write(list(fourth_recommendation['sypnopsis'])[0])
 
             with rec5:
-                st.header(list(fifth_recommendation['Name'])[0])
+                st.markdown(
+                    f"""
+                    <h3>{list(fifth_recommendation['Name'])[0]}</h3>
+                    """, unsafe_allow_html=True
+                )
                 st.image(list(fifth_recommendation['url'])[0])
                 st.write(list(fifth_recommendation['Genres'])[0])
                 st.write(list(fifth_recommendation['Score'])[0])
@@ -173,7 +193,11 @@ def receive_and_process_input():
                     st.write(list(fifth_recommendation['sypnopsis'])[0])
 
             with rec6:
-                st.header(list(sixth_recommendation['Name'])[0])
+                st.markdown(
+                    f"""
+                    <h3>{list(sixth_recommendation['Name'])[0]}</h3>
+                    """, unsafe_allow_html=True
+                )
                 st.image(list(sixth_recommendation['url'])[0])
                 st.write(list(sixth_recommendation['Genres'])[0])
                 st.write(list(sixth_recommendation['Score'])[0])
