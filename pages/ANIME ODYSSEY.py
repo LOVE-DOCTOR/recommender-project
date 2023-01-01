@@ -121,6 +121,7 @@ def receive_and_process_input():
     )
     if anime_show:
         with hc.HyLoader('...', hc.Loaders.pretty_loaders):
+            st.write('Warning: Search results may contain sexual content - Hentai')
             index, scores = get_index(anime_show)
             index, scores = index[1:], scores[1:]
 
@@ -149,6 +150,7 @@ def receive_and_process_input():
 
             with rec2:
                 st.header(list(second_recommendation['Name'])[0])
+                st.image(list(second_recommendation['url'])[0])
                 st.write(list(second_recommendation['Genres'])[0])
                 st.write(list(second_recommendation['Score'])[0])
                 with st.expander('Synopsis'):
@@ -156,6 +158,7 @@ def receive_and_process_input():
 
             with rec3:
                 st.header(list(third_recommendation['Name'])[0])
+                st.image(list(third_recommendation['url'])[0])
                 st.write(list(third_recommendation['Genres'])[0])
                 st.write(list(third_recommendation['Score'])[0])
                 with st.expander('Synopsis'):
@@ -163,6 +166,7 @@ def receive_and_process_input():
 
             with rec4:
                 st.header(list(fourth_recommendation['Name'])[0])
+                st.image(list(fourth_recommendation['url'])[0])
                 st.write(list(fourth_recommendation['Genres'])[0])
                 st.write(list(fourth_recommendation['Score'])[0])
                 with st.expander('Synopsis'):
@@ -170,6 +174,7 @@ def receive_and_process_input():
 
             with rec5:
                 st.header(list(fifth_recommendation['Name'])[0])
+                st.image(list(fifth_recommendation['url'])[0])
                 st.write(list(fifth_recommendation['Genres'])[0])
                 st.write(list(fifth_recommendation['Score'])[0])
                 with st.expander('Synopsis'):
@@ -177,6 +182,7 @@ def receive_and_process_input():
 
             with rec6:
                 st.header(list(sixth_recommendation['Name'])[0])
+                st.image(list(sixth_recommendation['url'])[0])
                 st.write(list(sixth_recommendation['Genres'])[0])
                 st.write(list(sixth_recommendation['Score'])[0])
                 with st.expander('Synopsis'):
