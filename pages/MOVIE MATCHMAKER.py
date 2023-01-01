@@ -3,7 +3,7 @@ import pandas as pd
 import hydralit_components as hc
 import torch
 from sentence_transformers import SentenceTransformer, util
-from streamlit_searchbox import st_searchbox
+# from streamlit_searchbox import st_searchbox
 
 st.set_page_config(
     page_title='MovieMatchmaker',
