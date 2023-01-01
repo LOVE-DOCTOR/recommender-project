@@ -144,7 +144,7 @@ def receive_and_process_input():
                 with st.expander('Overview'):
                     st.write(list(my_search['overview'])[0])
 
-            st.write('<div class="search-head"><h3>RESULTS</h3></div>', unsafe_allow_html=True)
+            st.write('<div class="search-head">RESULTS</div>', unsafe_allow_html=True)
             rec1, rec2, rec3 = st.columns(3)
             rec4, rec5, rec6 = st.columns(3)
 
