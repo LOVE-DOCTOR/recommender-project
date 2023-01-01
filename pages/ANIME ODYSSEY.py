@@ -84,15 +84,6 @@ def get_index(movie_name):
     return similarity_index, score
 
 
-def get_input_similarity(index, words):
-    index_sim = {}
-    for key, val in words.items():
-        sim = words[index].similarity(val)
-        index_sim.update({key: sim})
-
-    return dict(sorted(index_sim.items(), key=lambda x: x[1], reverse=True))
-
-
 def receive_and_process_input():
     anim = AnimeOdyssey()
     data = anim.read_parquet_data()
