@@ -4,3 +4,4 @@ torch==1.13.1
 pillow==9.3.0
 brotli==1.0.9
 pandas==1.5.2
+hydralit_components
