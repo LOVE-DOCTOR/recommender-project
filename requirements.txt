@@ -1,7 +1,7 @@
-streamlit==1.16.0
-sentence_transformers==2.2.2
-torch==1.13.1
-pillow==9.3.0
-brotli==1.0.9
-pandas==1.5.2
+streamlit
+sentence_transformers
+torch
+pillow
+brotli
+pandas
 hydralit_components
