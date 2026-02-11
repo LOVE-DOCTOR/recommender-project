@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import hydralit_components as hc
 import torch
 from sentence_transformers import SentenceTransformer, util
 # from streamlit_searchbox import st_searchbox
@@ -114,123 +113,122 @@ def receive_and_process_input():
         unsafe_allow_html=True,
     )
     if movie_name:
-        with hc.HyLoader('...', hc.Loaders.pretty_loaders):
-            img_first_url = 'https://image.tmdb.org/t/p/w400'
-            index, scores = get_index(movie_name)
-            index, scores = index[1:], scores[1:]
+        img_first_url = 'https://image.tmdb.org/t/p/w400'
+        index, scores = get_index(movie_name)
+        index, scores = index[1:], scores[1:]
 
-            top_6_ind = [int(i) for i in index]
+        top_6_ind = [int(i) for i in index]
 
-            data_names = data_movie_names.index(movie_name)
+        data_names = data_movie_names.index(movie_name)
 
-            my_search = data[data_names: data_names + 1]
-            first_recommendation = data[top_6_ind[0]: top_6_ind[0] + 1]
-            second_recommendation = data[top_6_ind[1]: top_6_ind[1] + 1]
-            third_recommendation = data[top_6_ind[2]: top_6_ind[2] + 1]
-            fourth_recommendation = data[top_6_ind[3]: top_6_ind[3] + 1]
-            fifth_recommendation = data[top_6_ind[4]: top_6_ind[4] + 1]
-            sixth_recommendation = data[top_6_ind[5]: top_6_ind[5] + 1]
+        my_search = data[data_names: data_names + 1]
+        first_recommendation = data[top_6_ind[0]: top_6_ind[0] + 1]
+        second_recommendation = data[top_6_ind[1]: top_6_ind[1] + 1]
+        third_recommendation = data[top_6_ind[2]: top_6_ind[2] + 1]
+        fourth_recommendation = data[top_6_ind[3]: top_6_ind[3] + 1]
+        fifth_recommendation = data[top_6_ind[4]: top_6_ind[4] + 1]
+        sixth_recommendation = data[top_6_ind[5]: top_6_ind[5] + 1]
 
-            sea1, sea2, sea3 = st.columns(3)
-            with sea1:
-                img_search_url = f'{img_first_url}{list(my_search["poster_path"])[0]}'
+        sea1, sea2, sea3 = st.columns(3)
+        with sea1:
+            img_search_url = f'{img_first_url}{list(my_search["poster_path"])[0]}'
 
-                st.write(f'<div class="search-head">SEARCH</div>', unsafe_allow_html=True)
+            st.write(f'<div class="search-head">SEARCH</div>', unsafe_allow_html=True)
 
-                st.markdown(f"""
-                                <h3>{list(my_search['original_title'])[0]}</h3>
-                                """, unsafe_allow_html=True)
-                st.image(img_search_url)
-                with st.expander('Overview'):
-                    st.write(list(my_search['overview'])[0])
+            st.markdown(f"""
+                            <h3>{list(my_search['original_title'])[0]}</h3>
+                            """, unsafe_allow_html=True)
+            st.image(img_search_url)
+            with st.expander('Overview'):
+                st.write(list(my_search['overview'])[0])
 
-            st.write('<div class="search-head">RESULTS</div>', unsafe_allow_html=True)
-            rec1, rec2, rec3 = st.columns(3)
-            rec4, rec5, rec6 = st.columns(3)
+        st.write('<div class="search-head">RESULTS</div>', unsafe_allow_html=True)
+        rec1, rec2, rec3 = st.columns(3)
+        rec4, rec5, rec6 = st.columns(3)
 
-            with rec1:
-                image_url0 = f'{img_first_url}{list(first_recommendation["poster_path"])[0]}'
-                st.markdown(f"""
-                <h3>{list(first_recommendation['original_title'])[0]}</h3>
-                """, unsafe_allow_html=True)
-                st.image(image_url0)
-                st.write(list(first_recommendation['genre'])[0])
-                st.write('Original Language: ', list(first_recommendation['original_language'])[0])
-                st.write('Media: ', list(first_recommendation['media_type'])[0].capitalize())
-                st.write('Adult: ', list(first_recommendation['adult'])[0])
-                st.write(f'Rating: {list(first_recommendation["vote_average"])[0]}')
-                with st.expander('Overview'):
-                    st.write(list(first_recommendation['overview'])[0])
+        with rec1:
+            image_url0 = f'{img_first_url}{list(first_recommendation["poster_path"])[0]}'
+            st.markdown(f"""
+            <h3>{list(first_recommendation['original_title'])[0]}</h3>
+            """, unsafe_allow_html=True)
+            st.image(image_url0)
+            st.write(list(first_recommendation['genre'])[0])
+            st.write('Original Language: ', list(first_recommendation['original_language'])[0])
+            st.write('Media: ', list(first_recommendation['media_type'])[0].capitalize())
+            st.write('Adult: ', list(first_recommendation['adult'])[0])
+            st.write(f'Rating: {list(first_recommendation["vote_average"])[0]}')
+            with st.expander('Overview'):
+                st.write(list(first_recommendation['overview'])[0])
 
-            with rec2:
-                image_url1 = f'{img_first_url}{list(second_recommendation["poster_path"])[0]}'
-                st.markdown(f"""
-                                <h3>{list(second_recommendation['original_title'])[0]}</h3>
-                                """, unsafe_allow_html=True)
-                st.image(image_url1)
-                st.write(list(second_recommendation['genre'])[0])
-                st.write('Original Language: ', list(second_recommendation['original_language'])[0])
-                st.write('Media: ', list(second_recommendation['media_type'])[0].capitalize())
-                st.write('Adult: ', list(second_recommendation['adult'])[0])
-                st.write(f'Rating: {list(second_recommendation["vote_average"])[0]}')
-                with st.expander('Overview'):
-                    st.write(list(second_recommendation['overview'])[0])
+        with rec2:
+            image_url1 = f'{img_first_url}{list(second_recommendation["poster_path"])[0]}'
+            st.markdown(f"""
+                            <h3>{list(second_recommendation['original_title'])[0]}</h3>
+                            """, unsafe_allow_html=True)
+            st.image(image_url1)
+            st.write(list(second_recommendation['genre'])[0])
+            st.write('Original Language: ', list(second_recommendation['original_language'])[0])
+            st.write('Media: ', list(second_recommendation['media_type'])[0].capitalize())
+            st.write('Adult: ', list(second_recommendation['adult'])[0])
+            st.write(f'Rating: {list(second_recommendation["vote_average"])[0]}')
+            with st.expander('Overview'):
+                st.write(list(second_recommendation['overview'])[0])
 
-            with rec3:
-                image_url2 = f'{img_first_url}{list(third_recommendation["poster_path"])[0]}'
-                st.markdown(f"""
-                                <h3>{list(third_recommendation['original_title'])[0]}</h3>
-                                """, unsafe_allow_html=True)
-                st.image(image_url2)
-                st.write(list(third_recommendation['genre'])[0])
-                st.write('Original Language: ', list(third_recommendation['original_language'])[0])
-                st.write('Media: ', list(third_recommendation['media_type'])[0].capitalize())
-                st.write('Adult: ', list(third_recommendation['adult'])[0])
-                st.write(f'Rating: {list(third_recommendation["vote_average"])[0]}')
-                with st.expander('Overview'):
-                    st.write(list(third_recommendation['overview'])[0])
+        with rec3:
+            image_url2 = f'{img_first_url}{list(third_recommendation["poster_path"])[0]}'
+            st.markdown(f"""
+                            <h3>{list(third_recommendation['original_title'])[0]}</h3>
+                            """, unsafe_allow_html=True)
+            st.image(image_url2)
+            st.write(list(third_recommendation['genre'])[0])
+            st.write('Original Language: ', list(third_recommendation['original_language'])[0])
+            st.write('Media: ', list(third_recommendation['media_type'])[0].capitalize())
+            st.write('Adult: ', list(third_recommendation['adult'])[0])
+            st.write(f'Rating: {list(third_recommendation["vote_average"])[0]}')
+            with st.expander('Overview'):
+                st.write(list(third_recommendation['overview'])[0])
 
-            with rec4:
-                image_url3 = f'{img_first_url}{list(fourth_recommendation["poster_path"])[0]}'
-                st.markdown(f"""
-                                <h3>{list(fourth_recommendation['original_title'])[0]}</h3>
-                                """, unsafe_allow_html=True)
-                st.image(image_url3)
-                st.write(list(fourth_recommendation['genre'])[0])
-                st.write('Original Language: ', list(fourth_recommendation['original_language'])[0])
-                st.write('Media: ', list(fourth_recommendation['media_type'])[0].capitalize())
-                st.write('Adult: ', list(fourth_recommendation['adult'])[0])
-                st.write(f'Rating: {list(fourth_recommendation["vote_average"])[0]}')
-                with st.expander('Overview'):
-                    st.write(list(fourth_recommendation['overview'])[0])
+        with rec4:
+            image_url3 = f'{img_first_url}{list(fourth_recommendation["poster_path"])[0]}'
+            st.markdown(f"""
+                            <h3>{list(fourth_recommendation['original_title'])[0]}</h3>
+                            """, unsafe_allow_html=True)
+            st.image(image_url3)
+            st.write(list(fourth_recommendation['genre'])[0])
+            st.write('Original Language: ', list(fourth_recommendation['original_language'])[0])
+            st.write('Media: ', list(fourth_recommendation['media_type'])[0].capitalize())
+            st.write('Adult: ', list(fourth_recommendation['adult'])[0])
+            st.write(f'Rating: {list(fourth_recommendation["vote_average"])[0]}')
+            with st.expander('Overview'):
+                st.write(list(fourth_recommendation['overview'])[0])
 
-            with rec5:
-                image_url4 = f'{img_first_url}{list(fifth_recommendation["poster_path"])[0]}'
-                st.markdown(f"""
-                                <h3>{list(fifth_recommendation['original_title'])[0]}</h3>
-                                """, unsafe_allow_html=True)
-                st.image(image_url4)
-                st.write(list(fifth_recommendation['genre'])[0])
-                st.write('Original Language: ', list(fifth_recommendation['original_language'])[0])
-                st.write('Media: ', list(fifth_recommendation['media_type'])[0].capitalize())
-                st.write('Adult: ', list(fifth_recommendation['adult'])[0])
-                st.write(f'Rating: {list(fifth_recommendation["vote_average"])[0]}')
-                with st.expander('Overview'):
-                    st.write(list(fifth_recommendation['overview'])[0])
+        with rec5:
+            image_url4 = f'{img_first_url}{list(fifth_recommendation["poster_path"])[0]}'
+            st.markdown(f"""
+                            <h3>{list(fifth_recommendation['original_title'])[0]}</h3>
+                            """, unsafe_allow_html=True)
+            st.image(image_url4)
+            st.write(list(fifth_recommendation['genre'])[0])
+            st.write('Original Language: ', list(fifth_recommendation['original_language'])[0])
+            st.write('Media: ', list(fifth_recommendation['media_type'])[0].capitalize())
+            st.write('Adult: ', list(fifth_recommendation['adult'])[0])
+            st.write(f'Rating: {list(fifth_recommendation["vote_average"])[0]}')
+            with st.expander('Overview'):
+                st.write(list(fifth_recommendation['overview'])[0])
 
-            with rec6:
-                image_url5 = f'{img_first_url}{list(sixth_recommendation["poster_path"])[0]}'
-                st.markdown(f"""
-                                <h3>{list(sixth_recommendation['original_title'])[0]}</h3>
-                                """, unsafe_allow_html=True)
-                st.image(image_url5)
-                st.write(list(sixth_recommendation['genre'])[0])
-                st.write('Original Language: ', list(sixth_recommendation['original_language'])[0])
-                st.write('Media: ', list(sixth_recommendation['media_type'])[0].capitalize())
-                st.write('Adult: ', list(sixth_recommendation['adult'])[0])
-                st.write(f'Rating: {list(sixth_recommendation["vote_average"])[0]}')
-                with st.expander('Overview'):
-                    st.write(list(sixth_recommendation['overview'])[0])
+        with rec6:
+            image_url5 = f'{img_first_url}{list(sixth_recommendation["poster_path"])[0]}'
+            st.markdown(f"""
+                            <h3>{list(sixth_recommendation['original_title'])[0]}</h3>
+                            """, unsafe_allow_html=True)
+            st.image(image_url5)
+            st.write(list(sixth_recommendation['genre'])[0])
+            st.write('Original Language: ', list(sixth_recommendation['original_language'])[0])
+            st.write('Media: ', list(sixth_recommendation['media_type'])[0].capitalize())
+            st.write('Adult: ', list(sixth_recommendation['adult'])[0])
+            st.write(f'Rating: {list(sixth_recommendation["vote_average"])[0]}')
+            with st.expander('Overview'):
+                st.write(list(sixth_recommendation['overview'])[0])
 
 
 if __name__ == '__main__':
