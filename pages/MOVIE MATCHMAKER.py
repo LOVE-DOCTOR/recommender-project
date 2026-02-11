@@ -27,17 +27,17 @@ class MovieMatchmaker:
         _self.embedding_with_title = embedding_with_title
         _self.embedding_without_title = embedding_without_title
 
-    @st.experimental_singleton
+    @st.cache_resource
     def read_parquet_data(_self):
         data = pd.read_parquet(_self.parquet)
         return data
 
-    @st.experimental_singleton
+    @st.cache_resource
     def read_model(_self):
         model = SentenceTransformer(_self.model_path)
         return model
 
-    @st.experimental_singleton
+    @st.cache_resource
     def generate_embeddings(_self):
         combined_embeddings = torch.load(_self.embedding_with_title)
         combined2_embeddings = torch.load(_self.embedding_without_title)
